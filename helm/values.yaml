@@ -1,9 +1,9 @@
 replicaCount: 3
 
 image:
-  repository: your-ecr-repo/health-app
+  repository: healthcare
   tag: latest
-  pullPolicy: IfNotPresent
+  pullPolicy: Never
 
 containerPort: 8000
 
@@ -30,7 +30,7 @@ autoscaling:
   targetCPUUtilizationPercentage: 70
 
 vpa:
-  enabled: true
+  enabled: false
   updateMode: "Off"
 
 ingress:
@@ -40,3 +40,4 @@ ingress:
 pdb:
   enabled: true
   minAvailable: 2
+

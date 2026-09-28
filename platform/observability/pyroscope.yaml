@@ -1,0 +1,4 @@
+architecture:
+  storage:
+    v1: false
+    v2: true

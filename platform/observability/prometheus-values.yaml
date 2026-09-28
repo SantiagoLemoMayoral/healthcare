@@ -38,3 +38,42 @@ kube-state-metrics:
 
 prometheus-node-exporter:
   enabled: true
+
+extraScrapeConfigs: |
+  - job_name: "blackbox-healthcare"
+
+    metrics_path: /probe
+
+    params:
+      module:
+        - http_2xx
+
+    static_configs:
+      - targets:
+          - http://healthcare.healthcare.svc.cluster.local:80/health
+
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: __param_target
+
+      - source_labels: [__param_target]
+        target_label: instance
+
+      - target_label: __address__
+        replacement: blackbox.observability.svc.cluster.local:9115
+
+serverFiles:
+  alerting_rules.yml:
+    groups:
+      - name: blackbox
+        rules:
+
+          - alert: HelpdeskDown
+            expr: probe_success == 0
+            for: 1m
+
+            labels:
+              severity: critical
+
+            annotations:
+              summary: "Helpdesk endpoint is unreachable"

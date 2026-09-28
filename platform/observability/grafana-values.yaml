@@ -50,3 +50,7 @@ datasources:
 
           serviceMap:
             datasourceUid: prometheus
+            
+      - name: Pyroscope
+        type: grafana-pyroscope-datasource
+        url: http://pyroscope.observability.svc.cluster.local:4040
