@@ -1,0 +1,42 @@
+replicaCount: 3
+
+image:
+  repository: your-ecr-repo/health-app
+  tag: latest
+  pullPolicy: IfNotPresent
+
+containerPort: 8000
+
+service:
+  type: ClusterIP
+  port: 80
+
+config:
+  APP_ENV: production
+  LOG_LEVEL: info
+
+resources:
+  requests:
+    cpu: 250m
+    memory: 256Mi
+  limits:
+    cpu: "1"
+    memory: 512Mi
+
+autoscaling:
+  enabled: true
+  minReplicas: 3
+  maxReplicas: 20
+  targetCPUUtilizationPercentage: 70
+
+vpa:
+  enabled: true
+  updateMode: "Off"
+
+ingress:
+  enabled: true
+  host: health.example.com
+
+pdb:
+  enabled: true
+  minAvailable: 2

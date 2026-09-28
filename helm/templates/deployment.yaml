@@ -1,0 +1,56 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-health-app
+
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+
+  selector:
+    matchLabels:
+      app: health-app
+
+  template:
+    metadata:
+      labels:
+        app: health-app
+
+    spec:
+      containers:
+        - name: health-app
+
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+
+          ports:
+            - containerPort: {{ .Values.containerPort }}
+
+          envFrom:
+            - configMapRef:
+                name: {{ .Release.Name }}-health-config
+
+          resources:
+{{ toYaml .Values.resources | indent 12 }}
+
+          startupProbe:
+            httpGet:
+              path: /health
+              port: {{ .Values.containerPort }}
+            periodSeconds: 5
+            failureThreshold: 30
+
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: {{ .Values.containerPort }}
+            periodSeconds: 10
+            failureThreshold: 3
+
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: {{ .Values.containerPort }}
+            periodSeconds: 20
+            failureThreshold: 3
