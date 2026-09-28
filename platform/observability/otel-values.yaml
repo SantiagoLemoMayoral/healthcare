@@ -1,7 +1,7 @@
 mode: daemonset
 
 image:
-  repository: otel/opentelemetry-collector-k8s
+  repository: otel/opentelemetry-collector-contrib
 
 presets:
   logsCollection:
@@ -55,6 +55,11 @@ config:
     jaeger: null
     zipkin: null
 
+    kubeletstats:
+      auth_type: serviceAccount
+      endpoint: "${env:K8S_NODE_IP}:10250"
+      insecure_skip_verify: true
+
   exporters:
 
     prometheus:
@@ -80,5 +85,7 @@ config:
           - otlphttp/loki
 
       traces:
+        receivers:
+          - otlp
         exporters:
           - otlp/tempo
