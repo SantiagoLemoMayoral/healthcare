@@ -11,4 +11,4 @@ spec:
 
   ports:
     - port: {{ .Values.service.port }}
-      targetPort: {{ .Values.containerPort }}
+      targetPort: {{ .Values.service.port }}

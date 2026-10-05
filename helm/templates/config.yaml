@@ -6,3 +6,10 @@ metadata:
 data:
   APP_ENV: {{ .Values.config.APP_ENV | quote }}
   LOG_LEVEL: {{ .Values.config.LOG_LEVEL | quote }}
+  REDIS_HOST: {{ .Values.redis.host | quote }}
+  REDIS_PORT: {{ .Values.redis.port | quote }}
+  PATIENT_SUMMARY_TTL: {{ .Values.redis.patientSummaryTTL | quote }}
+  DB_HOST: {{ .Values.database.host | quote }}
+  DB_PORT: {{ .Values.database.port | quote }}
+  DB_POOL_SIZE: {{ .Values.database.poolSize | quote }}
+  DB_POOL_TIMEOUT: {{ .Values.database.poolTimeout | quote }}

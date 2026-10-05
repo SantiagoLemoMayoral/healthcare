@@ -13,7 +13,7 @@ spec:
     name: {{ .Release.Name }}-health-app
 
   minReplicas: {{ .Values.autoscaling.minReplicas }}
-  maxReplicas: {{ .Values.autoscaling.maxReplicas }}
+  maxReplicas: {{ div .Values.database.totalpool .Values.database.poolsize }}
 
   metrics:
     - type: Resource
@@ -26,3 +26,4 @@ spec:
           averageUtilization: {{ .Values.autoscaling.targetCPUUtilizationPercentage }}
 
 {{- end }}
+
